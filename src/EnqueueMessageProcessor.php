@@ -55,7 +55,7 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
     /**
      * {@inheritdoc}
      */
-    public function process(PsrMessage $psrMessage, PsrContext $psrContext):Result
+    public function process(PsrMessage $psrMessage, PsrContext $psrContext): Result
     {
         $message = $this->serializer->unserialize($psrMessage->getBody());
 
@@ -91,7 +91,7 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedCommand():array
+    public static function getSubscribedCommand(): array
     {
         return [
             'processorName' => Commands::PROOPH_BUS,
@@ -104,7 +104,7 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedQueues():string
+    public static function getSubscribedQueues(): string
     {
         return Commands::PROOPH_BUS;
     }
