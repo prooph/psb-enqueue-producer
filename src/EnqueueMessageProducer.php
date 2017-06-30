@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Client\Message as EnqueueMessage;
@@ -39,9 +41,9 @@ class EnqueueMessageProducer implements MessageProducer
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
-    public function __invoke(Message $message, Deferred $deferred = null):void
+    public function __invoke(Message $message, Deferred $deferred = null): void
     {
         $needReply = (bool) $deferred;
 

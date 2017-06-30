@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 namespace ProophTest\ServiceBus;
 
 use Enqueue\Client\Config;
@@ -6,15 +8,15 @@ use Enqueue\Consumption\ChainExtension;
 use Enqueue\Consumption\Extension\LimitConsumedMessagesExtension;
 use Enqueue\Consumption\Extension\LimitConsumptionTimeExtension;
 use Enqueue\SimpleClient\SimpleClient;
-use Prooph\ServiceBus\Message\Enqueue\Commands;
-use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor;
-use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
-use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
 use PHPUnit\Framework\TestCase;
 use Prooph\Common\Messaging\FQCNMessageFactory;
 use Prooph\Common\Messaging\NoOpMessageConverter;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
+use Prooph\ServiceBus\Message\Enqueue\Commands;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
 use Prooph\ServiceBus\Plugin\Router\CommandRouter;
 use Prooph\ServiceBus\Plugin\Router\EventRouter;
 use Prooph\ServiceBus\QueryBus;
@@ -69,7 +71,7 @@ class EnqueueMessageProducerTest extends TestCase
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(1),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds'))
+            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
         ]));
 
         $this->assertNotNull($doSomethingHandler->getLastMessage());
@@ -105,7 +107,7 @@ class EnqueueMessageProducerTest extends TestCase
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(1),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds'))
+            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
         ]));
 
         $this->assertNotNull($somethingDoneListener->getLastMessage());

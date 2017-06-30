@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Util\JSON;
@@ -29,7 +31,7 @@ class EnqueueSerializer
         $this->messageConverter = $messageConverter;
     }
 
-    public function serialize(Message $message):string
+    public function serialize(Message $message): string
     {
         $messageData = $this->messageConverter->convertToArray($message);
 
@@ -43,7 +45,7 @@ class EnqueueSerializer
         ]);
     }
 
-    public function unserialize(string $rawMessage):Message
+    public function unserialize(string $rawMessage): Message
     {
         $data = JSON::decode($rawMessage);
 
