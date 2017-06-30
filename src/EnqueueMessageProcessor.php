@@ -48,7 +48,6 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
         $this->commandBus = $commandBus;
         $this->eventBus = $eventBus;
         $this->queryBus = $queryBus;
-
         $this->serializer = $serializer;
     }
 
