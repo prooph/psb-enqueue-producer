@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Formapro\Prooph\ServiceBus\Message\Enqueue;
+namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Prooph\Common\Messaging\Message;
 

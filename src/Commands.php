@@ -1,5 +1,5 @@
 <?php
-namespace Formapro\Prooph\ServiceBus\Message\Enqueue;
+namespace Prooph\ServiceBus\Message\Enqueue;
 
 class Commands
 {

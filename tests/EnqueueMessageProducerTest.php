@@ -6,10 +6,10 @@ use Enqueue\Consumption\ChainExtension;
 use Enqueue\Consumption\Extension\LimitConsumedMessagesExtension;
 use Enqueue\Consumption\Extension\LimitConsumptionTimeExtension;
 use Enqueue\SimpleClient\SimpleClient;
-use Formapro\Prooph\ServiceBus\Message\Enqueue\Commands;
-use Formapro\Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor;
-use Formapro\Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
-use Formapro\Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
+use Prooph\ServiceBus\Message\Enqueue\Commands;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
+use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
 use PHPUnit\Framework\TestCase;
 use Prooph\Common\Messaging\FQCNMessageFactory;
 use Prooph\Common\Messaging\NoOpMessageConverter;
@@ -17,13 +17,10 @@ use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
 use Prooph\ServiceBus\Plugin\Router\CommandRouter;
 use Prooph\ServiceBus\Plugin\Router\EventRouter;
-use Prooph\ServiceBus\Plugin\Router\QueryRouter;
 use Prooph\ServiceBus\QueryBus;
 use ProophTest\ServiceBus\Mock\DoSomething;
-use ProophTest\ServiceBus\Mock\FetchSomething;
 use ProophTest\ServiceBus\Mock\MessageHandler;
 use ProophTest\ServiceBus\Mock\SomethingDone;
-use React\Promise\Deferred;
 use Symfony\Component\Filesystem\Filesystem;
 
 class EnqueueMessageProducerTest extends TestCase
@@ -115,54 +112,4 @@ class EnqueueMessageProducerTest extends TestCase
 
         $this->assertEquals($event->payload(), $somethingDoneListener->getLastMessage()->payload());
     }
-
-//    /**
-//     * @test
-//     */
-//    public function it_sends_a_query_to_queue_forwards_it_to_query_bus_and_returns_reply()
-//    {
-//        $query = new FetchSomething(['data' => 'test query']);
-//        $expectedReply = ['data' => 'test reply'];
-//
-//        //The message dispatcher works with a ready-to-use enqueue producer and one queue
-//        $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 2000);
-//
-//        $deferred = new Deferred();
-//
-//        //Normally you would send the query on a query bus. We skip this step here cause we are only
-//        //interested in the function of the message dispatcher
-//        $messageProducer($query, $deferred);
-//
-//        //Set up query bus which will receive the query message from the enqueue consumer
-//        $consumerQueryBus = new QueryBus();
-//
-//        $somethingDoneListener = new MessageHandler();
-//
-//        $router = new QueryRouter();
-//        $router->route($query->messageName())->to(function($message) use ($somethingDoneListener) {
-//            call_user_func($somethingDoneListener, $message);
-//        });
-//        $router->attachToMessageBus($consumerQueryBus);
-//
-//        $enqueueProcessor = new EnqueueMessageProcessor(new CommandBus(), new EventBus(), $consumerQueryBus, $this->serializer);
-//        $this->client->bind(Config::COMMAND_TOPIC, Commands::PROOPH_BUS, $enqueueProcessor);
-//
-//        $this->client->consume(new ChainExtension([
-//            new LimitConsumedMessagesExtension(1),
-//            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds'))
-//        ]));
-//
-//        $this->assertNotNull($somethingDoneListener->getLastMessage());
-//
-//        $this->assertEquals($query->payload(), $somethingDoneListener->getLastMessage()->payload());
-//
-//        $hit = false;
-//        $deferred->promise()->then(function($value) use ($expectedReply, &$hit) {
-//            $hit = true;
-//
-//            $this->assertEquals($expectedReply, $value);
-//        });
-//
-//        $this->assertTrue($hit);
-//    }
 }

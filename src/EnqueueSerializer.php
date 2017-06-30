@@ -1,7 +1,6 @@
 <?php
-namespace Formapro\Prooph\ServiceBus\Message\Enqueue;
+namespace Prooph\ServiceBus\Message\Enqueue;
 
-use Enqueue\Psr\PsrMessage;
 use Enqueue\Util\JSON;
 use Prooph\Common\Messaging\Message;
 use Prooph\Common\Messaging\MessageConverter;

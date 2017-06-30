@@ -1,5 +1,5 @@
 <?php
-namespace Formapro\Prooph\ServiceBus\Message\Enqueue;
+namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Client\CommandSubscriberInterface;
 use Enqueue\Consumption\QueueSubscriberInterface;

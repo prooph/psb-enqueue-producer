@@ -1,5 +1,5 @@
 <?php
-namespace Formapro\Prooph\ServiceBus\Message\Enqueue;
+namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Client\Message as EnqueueMessage;
 use Enqueue\Client\ProducerInterface;
@@ -8,8 +8,6 @@ use Enqueue\Util\JSON;
 use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\Async\MessageProducer;
 use React\Promise\Deferred;
-use React\Promise\LazyPromise;
-use React\Promise\Promise;
 
 class EnqueueMessageProducer implements MessageProducer
 {
@@ -51,7 +49,7 @@ class EnqueueMessageProducer implements MessageProducer
         $enqueueMessage->setContentType('application/json');
 
         if ($message instanceof DelayedMessage) {
-            $enqueueMessage->setDelay($message->delay());
+            $enqueueMessage->setDelay((int) $message->delay() / 1000);
         }
 
         $reply = $this->producer->sendCommand(Commands::PROOPH_BUS, $enqueueMessage, $needReply);
