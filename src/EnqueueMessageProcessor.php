@@ -59,7 +59,6 @@ class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface,
 
         switch ($message->messageType()) {
             case Message::TYPE_EVENT:
-                var_dump($message->messageName());
                 $this->eventBus->dispatch($message);
 
                 break;

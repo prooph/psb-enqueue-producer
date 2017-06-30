@@ -33,7 +33,7 @@ class EnqueueMessageProducer implements MessageProducer
      * @param EnqueueSerializer $serializer
      * @param int $replyTimeout
      */
-    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, $replyTimeout = 30000)
+    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, $replyTimeout)
     {
         $this->producer = $producer;
         $this->serializer = $serializer;
