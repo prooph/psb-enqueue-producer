@@ -5,7 +5,7 @@ Use [Enqueue](https://github.com/php-enqueue/enqueue-dev) as a message producer 
 
 ## Installation
 
-You can install the producer via composer by executing `$ composer require formapro/psb-enqueue-producer`.
+You can install the producer via composer by executing `$ composer require prooph/psb-enqueue-producer`.
 
 ## Usage
 
