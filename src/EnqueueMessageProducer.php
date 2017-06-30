@@ -28,10 +28,16 @@ final class EnqueueMessageProducer implements MessageProducer
      */
     private $replyTimeout;
 
-    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, int $replyTimeout)
+    /**
+     * @var string
+     */
+    private $commandName;
+
+    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, string $commandName, int $replyTimeout)
     {
         $this->producer = $producer;
         $this->serializer = $serializer;
+        $this->commandName = $commandName;
         $this->replyTimeout = $replyTimeout;
     }
 
@@ -47,7 +53,7 @@ final class EnqueueMessageProducer implements MessageProducer
             $enqueueMessage->setDelay((int) $message->delay() / 1000);
         }
 
-        $reply = $this->producer->sendCommand(Commands::PROOPH_BUS, $enqueueMessage, (bool) $deferred);
+        $reply = $this->producer->sendCommand($this->commandName, $enqueueMessage, (bool) $deferred);
 
         if (null !== $deferred) {
             try {

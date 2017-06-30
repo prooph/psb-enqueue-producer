@@ -3,8 +3,6 @@
 declare(strict_types=1);
 namespace Prooph\ServiceBus\Message\Enqueue;
 
-use Enqueue\Client\CommandSubscriberInterface;
-use Enqueue\Consumption\QueueSubscriberInterface;
 use Enqueue\Consumption\Result;
 use Enqueue\Psr\PsrContext;
 use Enqueue\Psr\PsrMessage;
@@ -15,7 +13,7 @@ use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
 use Prooph\ServiceBus\QueryBus;
 
-final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface, CommandSubscriberInterface
+final class EnqueueMessageProcessor implements PsrProcessor
 {
     /**
      * @var CommandBus
@@ -37,12 +35,6 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
      */
     private $serializer;
 
-    /**
-     * @param CommandBus $commandBus
-     * @param EventBus $eventBus
-     * @param QueryBus $queryBus
-     * @param EnqueueSerializer $serializer
-     */
     public function __construct(CommandBus $commandBus, EventBus $eventBus, QueryBus $queryBus, EnqueueSerializer $serializer)
     {
         $this->commandBus = $commandBus;
@@ -85,26 +77,5 @@ final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInte
         }
 
         return Result::ack();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedCommand(): array
-    {
-        return [
-            'processorName' => Commands::PROOPH_BUS,
-            'queueName' => Commands::PROOPH_BUS,
-            'queueNameHardcoded' => true,
-            'exclusive' => true,
-        ];
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public static function getSubscribedQueues(): string
-    {
-        return Commands::PROOPH_BUS;
     }
 }
