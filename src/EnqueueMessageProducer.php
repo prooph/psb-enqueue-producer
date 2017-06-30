@@ -11,7 +11,7 @@ use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\Async\MessageProducer;
 use React\Promise\Deferred;
 
-class EnqueueMessageProducer implements MessageProducer
+final class EnqueueMessageProducer implements MessageProducer
 {
     /**
      * @var ProducerInterface
@@ -28,12 +28,7 @@ class EnqueueMessageProducer implements MessageProducer
      */
     private $replyTimeout;
 
-    /**
-     * @param ProducerInterface $producer
-     * @param EnqueueSerializer $serializer
-     * @param int $replyTimeout
-     */
-    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, $replyTimeout)
+    public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, int $replyTimeout)
     {
         $this->producer = $producer;
         $this->serializer = $serializer;
@@ -45,8 +40,6 @@ class EnqueueMessageProducer implements MessageProducer
      */
     public function __invoke(Message $message, Deferred $deferred = null): void
     {
-        $needReply = (bool) $deferred;
-
         $enqueueMessage = new EnqueueMessage($this->serializer->serialize($message));
         $enqueueMessage->setContentType('application/json');
 
@@ -54,9 +47,9 @@ class EnqueueMessageProducer implements MessageProducer
             $enqueueMessage->setDelay((int) $message->delay() / 1000);
         }
 
-        $reply = $this->producer->sendCommand(Commands::PROOPH_BUS, $enqueueMessage, $needReply);
+        $reply = $this->producer->sendCommand(Commands::PROOPH_BUS, $enqueueMessage, (bool) $deferred);
 
-        if ($needReply) {
+        if (null !== $deferred) {
             try {
                 $value = JSON::decode($reply->receive($this->replyTimeout)->getBody());
 

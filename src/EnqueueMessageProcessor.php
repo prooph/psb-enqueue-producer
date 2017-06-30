@@ -15,7 +15,7 @@ use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
 use Prooph\ServiceBus\QueryBus;
 
-class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface, CommandSubscriberInterface
+final class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface, CommandSubscriberInterface
 {
     /**
      * @var CommandBus
@@ -55,7 +55,7 @@ class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface,
     /**
      * {@inheritdoc}
      */
-    public function process(PsrMessage $psrMessage, PsrContext $psrContext)
+    public function process(PsrMessage $psrMessage, PsrContext $psrContext):Result
     {
         $message = $this->serializer->unserialize($psrMessage->getBody());
 
@@ -85,13 +85,13 @@ class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface,
                 ));
         }
 
-        return self::ACK;
+        return Result::ack();
     }
 
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedCommand()
+    public static function getSubscribedCommand():array
     {
         return [
             'processorName' => Commands::PROOPH_BUS,
@@ -104,7 +104,7 @@ class EnqueueMessageProcessor implements PsrProcessor, QueueSubscriberInterface,
     /**
      * {@inheritdoc}
      */
-    public static function getSubscribedQueues()
+    public static function getSubscribedQueues():string
     {
         return Commands::PROOPH_BUS;
     }
