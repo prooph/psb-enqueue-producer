@@ -21,19 +21,12 @@ use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
 use ProophTest\ServiceBus\Mock\DoSomething;
 use ProophTest\ServiceBus\Mock\FetchSomething;
 use ProophTest\ServiceBus\Mock\SomethingDone;
-use Symfony\Bridge\PhpUnit\ClockMock;
 
 /**
  * @group time-sensitive
  */
 class EnqueueSerializerTest extends TestCase
 {
-    public static function setupBeforeClass()
-    {
-        ClockMock::register(__CLASS__);
-        ClockMock::withClockMock(true);
-    }
-
     public function testShouldAllowSerializeAndUnserializeCommand()
     {
         $command = new DoSomething(['key' => 'value']);
