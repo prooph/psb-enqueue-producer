@@ -1,5 +1,4 @@
 <?php
-
 /**
  * This file is part of the prooph/psb-enqueue-producer.
  * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
