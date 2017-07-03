@@ -11,119 +11,212 @@
 
 declare(strict_types=1);
 
-namespace ProophTest\ServiceBus\Functional;
+namespace ProophTest\ServiceBus\Enqueue;
 
-use Enqueue\Client\Config;
-use Enqueue\Consumption\ChainExtension;
-use Enqueue\Consumption\Extension\LimitConsumedMessagesExtension;
-use Enqueue\Consumption\Extension\LimitConsumptionTimeExtension;
-use Enqueue\SimpleClient\SimpleClient;
+use Enqueue\Client\ProducerInterface;
+use Enqueue\Client\TraceableProducer;
+use Enqueue\Null\NullMessage;
+use Enqueue\Rpc\Promise;
+use Enqueue\Rpc\TimeoutException;
 use PHPUnit\Framework\TestCase;
-use Prooph\Common\Messaging\FQCNMessageFactory;
-use Prooph\Common\Messaging\NoOpMessageConverter;
-use Prooph\ServiceBus\CommandBus;
-use Prooph\ServiceBus\EventBus;
-use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor;
+use Prooph\Common\Messaging\Message;
+use Prooph\ServiceBus\Message\Enqueue\DelayedMessage;
 use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
 use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
-use Prooph\ServiceBus\Plugin\Router\CommandRouter;
-use Prooph\ServiceBus\Plugin\Router\EventRouter;
-use Prooph\ServiceBus\QueryBus;
-use ProophTest\ServiceBus\Mock\DoSomething;
-use ProophTest\ServiceBus\Mock\MessageHandler;
-use ProophTest\ServiceBus\Mock\SomethingDone;
-use Symfony\Component\Filesystem\Filesystem;
+use React\Promise\Deferred;
 
 class EnqueueMessageProducerTest extends TestCase
 {
-    /**
-     * @var SimpleClient
-     */
-    private $client;
-
-    /**
-     * @var EnqueueSerializer
-     */
-    private $serializer;
-
-    protected function setUp()
+    public function testShouldSendMessageWithoutDelay()
     {
-        (new Filesystem())->remove(__DIR__.'/queues/');
+        $message = $this->createProophMessageMock();
 
-        $this->client = new SimpleClient('file://'.__DIR__.'/queues');
+        $serializer = $this->createSerializerMock();
+        $serializer
+        ->expects($this->once())
+            ->method('serialize')
+            ->with($this->identicalTo($message))
+            ->willReturn('theSerializedMessage');
 
-        $this->serializer = new EnqueueSerializer(new FQCNMessageFactory(), new NoOpMessageConverter());
+        $enqueueProducer = $this->createProducer();
+
+        $producer = new EnqueueMessageProducer(
+            $enqueueProducer,
+            $serializer,
+            'prooph_bus',
+            30000
+        );
+
+        $producer($message);
+
+        $traces = $enqueueProducer->getCommandTraces('prooph_bus');
+
+        $this->assertCount(1, $traces);
+        $this->assertEquals('theSerializedMessage', $traces[0]['body']);
+        $this->assertEquals('application/json', $traces[0]['contentType']);
+        $this->assertNull($traces[0]['delay']);
+    }
+
+    public function testShouldSendMessageWithDelay()
+    {
+        $message = $this->createMock(DelayedMessage::class);
+        $message
+            ->expects($this->once())
+            ->method('delay')
+            ->willReturn(12345);
+
+        $serializer = $this->createSerializerMock();
+        $serializer
+            ->expects($this->once())
+            ->method('serialize')
+            ->with($this->identicalTo($message))
+            ->willReturn('theSerializedMessage');
+
+        $enqueueProducer = $this->createProducer();
+
+        $producer = new EnqueueMessageProducer(
+            $enqueueProducer,
+            $serializer,
+            'prooph_bus',
+            30000
+        );
+
+        $producer($message);
+
+        $traces = $enqueueProducer->getCommandTraces('prooph_bus');
+
+        $this->assertCount(1, $traces);
+        $this->assertEquals('theSerializedMessage', $traces[0]['body']);
+        $this->assertEquals('application/json', $traces[0]['contentType']);
+        $this->assertEquals(12.345, $traces[0]['delay']);
+    }
+
+    public function testShouldSendMessageWithDeferred()
+    {
+        $message = $this->createProophMessageMock();
+
+        $serializer = $this->createSerializerMock();
+        $serializer
+            ->expects($this->once())
+            ->method('serialize')
+            ->with($this->identicalTo($message))
+            ->willReturn('theSerializedMessage');
+
+        $enqueuePromise = $this->createMock(Promise::class);
+        $enqueuePromise
+            ->expects($this->once())
+            ->method('receive')
+            ->with(30000)
+            ->willReturn(new NullMessage('{"foo": "fooVal"}'));
+
+        $enqueueProducer = $this->createReplyProducer($enqueuePromise);
+
+        $producer = new EnqueueMessageProducer(
+            $enqueueProducer,
+            $serializer,
+            'prooph_bus',
+            30000
+        );
+
+        $deferred = $this->createMock(Deferred::class);
+        $deferred
+            ->expects($this->once())
+            ->method('resolve')
+            ->with(['foo' => 'fooVal']);
+
+        $producer($message, $deferred);
+
+        $traces = $enqueueProducer->getCommandTraces('prooph_bus');
+
+        $this->assertCount(1, $traces);
+        $this->assertEquals('theSerializedMessage', $traces[0]['body']);
+        $this->assertEquals('application/json', $traces[0]['contentType']);
+    }
+
+    public function testShouldSendMessageWithDeferredAndReplyTimeout()
+    {
+        $message = $this->createProophMessageMock();
+
+        $serializer = $this->createSerializerMock();
+        $serializer
+            ->expects($this->once())
+            ->method('serialize')
+            ->with($this->identicalTo($message))
+            ->willReturn('theSerializedMessage');
+
+        $enqueuePromise = $this->createMock(Promise::class);
+        $enqueuePromise
+            ->expects($this->once())
+            ->method('receive')
+            ->willThrowException(new TimeoutException('The RPC call is time-outed'));
+
+        $enqueueProducer = $this->createReplyProducer($enqueuePromise);
+
+        $producer = new EnqueueMessageProducer(
+            $enqueueProducer,
+            $serializer,
+            'prooph_bus',
+            30000
+        );
+
+        $deferred = $this->createMock(Deferred::class);
+        $deferred
+            ->expects($this->once())
+            ->method('reject')
+            ->with('The RPC call is time-outed');
+
+        $producer($message, $deferred);
+
+        $traces = $enqueueProducer->getCommandTraces('prooph_bus');
+
+        $this->assertCount(1, $traces);
+        $this->assertEquals('theSerializedMessage', $traces[0]['body']);
+        $this->assertEquals('application/json', $traces[0]['contentType']);
     }
 
     /**
-     * @test
+     * @return \PHPUnit_Framework_MockObject_MockObject|Message
      */
-    public function it_sends_a_command_to_queue_pulls_it_with_consumer_and_forwards_it_to_command_bus()
+    private function createProophMessageMock()
     {
-        $command = new DoSomething(['data' => 'test command']);
-
-        //The message dispatcher works with a ready-to-use enqueue producer and one queue
-        $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
-
-        //Normally you would send the command on a command bus. We skip this step here cause we are only
-        //interested in the function of the message dispatcher
-        $messageProducer($command);
-
-        //Set up command bus which will receive the command message from the enqueue consumer
-        $consumerCommandBus = new CommandBus();
-
-        $doSomethingHandler = new MessageHandler();
-
-        $router = new CommandRouter();
-        $router->route($command->messageName())->to($doSomethingHandler);
-        $router->attachToMessageBus($consumerCommandBus);
-
-        $enqueueProcessor = new EnqueueMessageProcessor($consumerCommandBus, new EventBus(), new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
-
-        $this->client->consume(new ChainExtension([
-            new LimitConsumedMessagesExtension(1),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
-        ]));
-
-        $this->assertNotNull($doSomethingHandler->getLastMessage());
-
-        $this->assertEquals($command->payload(), $doSomethingHandler->getLastMessage()->payload());
+        return $this->createMock(Message::class);
     }
 
     /**
-     * @test
+     * @return \PHPUnit_Framework_MockObject_MockObject|EnqueueSerializer
      */
-    public function it_sends_an_event_to_queue_pulls_it_with_consumer_and_forwards_it_to_event_bus()
+    private function createSerializerMock()
     {
-        $event = new SomethingDone(['data' => 'test event']);
+        return $this->createMock(EnqueueSerializer::class);
+    }
 
-        //The message dispatcher works with a ready-to-use enqueue producer and one queue
-        $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
+    /**
+     * @return TraceableProducer
+     */
+    private function createProducer()
+    {
+        $producerMock = $this->createMock(ProducerInterface::class);
+        $producerMock
+            ->expects($this->once())
+            ->method('sendCommand')
+            ->with($this->anything(), $this->anything(), false)
+            ->willReturn(null);
 
-        //Normally you would send the event on a event bus. We skip this step here cause we are only
-        //interested in the function of the message dispatcher
-        $messageProducer($event);
+        return new TraceableProducer($producerMock);
+    }
 
-        //Set up event bus which will receive the event message from the enqueue consumer
-        $consumerEventBus = new EventBus();
+    /**
+     * @return TraceableProducer
+     */
+    private function createReplyProducer(Promise $promise)
+    {
+        $producerMock = $this->createMock(ProducerInterface::class);
+        $producerMock
+            ->expects($this->once())
+            ->method('sendCommand')
+            ->with($this->anything(), $this->anything(), true)
+            ->willReturn($promise);
 
-        $somethingDoneListener = new MessageHandler();
-
-        $router = new EventRouter();
-        $router->route($event->messageName())->to($somethingDoneListener);
-        $router->attachToMessageBus($consumerEventBus);
-
-        $enqueueProcessor = new EnqueueMessageProcessor(new CommandBus(), $consumerEventBus, new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
-
-        $this->client->consume(new ChainExtension([
-            new LimitConsumedMessagesExtension(1),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
-        ]));
-
-        $this->assertNotNull($somethingDoneListener->getLastMessage());
-
-        $this->assertEquals($event->payload(), $somethingDoneListener->getLastMessage()->payload());
+        return new TraceableProducer($producerMock);
     }
 }

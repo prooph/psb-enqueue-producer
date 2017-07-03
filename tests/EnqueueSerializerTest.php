@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace ProophTest\ServiceBus\Functional;
+namespace ProophTest\ServiceBus\Enqueue;
 
 use PHPUnit\Framework\TestCase;
 use Prooph\Common\Messaging\FQCNMessageFactory;

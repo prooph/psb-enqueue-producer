@@ -9,7 +9,7 @@ You can install the producer via composer by executing `$ composer require proop
 
 ## Usage
 
-Check the [EnqueueMessageProducerTest](tests/EnqueueMessageProducerTest.php). Set up the producer is a straightforward task. Most of
+Check the [EnqueueMessageProducerTest](tests/Functional/EnqueueMessageProducerTest.php). Set up the producer is a straightforward task. Most of
 the required components are provided by PSB and Enqueue. This package only provides the glue code needed to let both
 systems work together.
 

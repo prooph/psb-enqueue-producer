@@ -11,7 +11,7 @@
 
 declare(strict_types=1);
 
-namespace ProophTest\ServiceBus;
+namespace ProophTest\ServiceBus\Enqueue;
 
 use Enqueue\Consumption\Result;
 use Enqueue\Null\NullContext;
