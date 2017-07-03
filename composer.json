@@ -37,10 +37,15 @@
         "enqueue/fs": "^0.5",
         "enqueue/null": "^0.5",
         "container-interop/container-interop": "^1.1",
+        "sandrokeil/interop-config": "^2.0.1",
         "phpspec/prophecy": "^1.7",
         "prooph/php-cs-fixer-config": "^0.1.1",
         "phpunit/phpunit": "^6.0",
         "malukenho/docheader": "^0.1.4"
+    },
+    "suggest" : {
+        "psr/container": "^1.0 for usage of provided factories",
+        "sandrokeil/interop-config": "For usage of provided factories"
     },
     "autoload": {
         "psr-4": {
