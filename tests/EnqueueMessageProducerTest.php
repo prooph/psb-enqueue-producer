@@ -1,7 +1,8 @@
 <?php
 
 declare(strict_types=1);
-namespace ProophTest\ServiceBus;
+
+namespace ProophTest\ServiceBus\Functional;
 
 use Enqueue\Client\Config;
 use Enqueue\Consumption\ChainExtension;
@@ -31,6 +32,9 @@ class EnqueueMessageProducerTest extends TestCase
      */
     private $client;
 
+    /**
+     * @var EnqueueSerializer
+     */
     private $serializer;
 
     protected function setUp()

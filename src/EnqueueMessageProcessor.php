@@ -62,12 +62,12 @@ final class EnqueueMessageProcessor implements PsrProcessor
         $message = $this->serializer->unserialize($psrMessage->getBody());
 
         switch ($message->messageType()) {
-            case Message::TYPE_EVENT:
-                $this->eventBus->dispatch($message);
-
-                break;
             case Message::TYPE_COMMAND:
                 $this->commandBus->dispatch($message);
+
+                break;
+            case Message::TYPE_EVENT:
+                $this->eventBus->dispatch($message);
 
                 break;
             case Message::TYPE_QUERY:
