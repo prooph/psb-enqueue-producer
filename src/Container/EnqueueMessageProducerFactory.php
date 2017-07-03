@@ -1,10 +1,9 @@
 <?php
-
 /**
  * This file is part of the prooph/psb-enqueue-producer.
- * (c) 2016-2017 prooph software GmbH <contact@prooph.de>
- * (c) 2016-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017 Maksym Kotliar <kotlyar.maksim@gmail.com>
+ * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2017 Maksym Kotliar <kotlyar.maksim@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -18,10 +17,10 @@ use Enqueue\SimpleClient\SimpleClient;
 use Interop\Config\ConfigurationTrait;
 use Interop\Config\ProvidesDefaultOptions;
 use Interop\Config\RequiresConfigId;
-use Interop\Container\ContainerInterface;
 use Prooph\ServiceBus\Exception\InvalidArgumentException;
 use Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer;
 use Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer;
+use Psr\Container\ContainerInterface;
 
 class EnqueueMessageProducerFactory implements ProvidesDefaultOptions, RequiresConfigId
 {
