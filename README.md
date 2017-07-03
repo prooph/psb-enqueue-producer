@@ -26,8 +26,8 @@ systems work together.
 - Ask prooph questions on [prooph-users](https://groups.google.com/forum/?hl=de#!forum/prooph) google group.
 - Ask enqueue questions in [enqueue](https://gitter.im/php-enqueue/Lobby) gitter chat.
 - File issues at [https://github.com/prooph/psb-enqueue-producer/issues](https://github.com/prooph/psb-enqueue-producer/issues).
+- Say hello in the [prooph gitter](https://gitter.im/prooph/improoph) chat.
 
 ## License
 
 It is released under the [MIT License](LICENSE).
-
