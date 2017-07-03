@@ -1,5 +1,15 @@
 <?php
 
+/**
+ * This file is part of the prooph/psb-enqueue-producer.
+ * (c) 2016-2017 prooph software GmbH <contact@prooph.de>
+ * (c) 2016-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017 Maksym Kotliar <kotlyar.maksim@gmail.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 declare(strict_types=1);
 
 namespace Prooph\ServiceBus\Message\Enqueue;
@@ -7,8 +17,6 @@ namespace Prooph\ServiceBus\Message\Enqueue;
 use Prooph\Common\Messaging\Message;
 
 /**
- * TODO copy pasted from https://github.com/prooph/humus-amqp-producer/blob/master/src/DelayedMessage.php
- *
  * Interface to represent delayed messages (aka messages that are processed in the future instead of now)
  * Usually you would implement these for commands that should be executed at a later time
  */
