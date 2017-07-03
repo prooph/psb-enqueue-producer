@@ -66,7 +66,7 @@ class EnqueueMessageProducerFactory implements ProvidesDefaultOptions, RequiresC
         $options = $this->options($container->get('config'), $this->messageProducerCallbackName);
 
         return new EnqueueMessageProducer(
-            $container->get($options['simple_client'])->getProducer(),
+            $container->get($options['client'])->getProducer(),
             $container->get($options['serializer']),
             $options['command_name'],
             $options['reply_timeout']
@@ -75,13 +75,13 @@ class EnqueueMessageProducerFactory implements ProvidesDefaultOptions, RequiresC
 
     public function dimensions(): array
     {
-        return ['prooph', 'enqueue_producer', 'message_producer'];
+        return ['prooph', 'enqueue-producer', 'message_producer'];
     }
 
     public function defaultOptions(): array
     {
         return [
-            'simple_client' => SimpleClient::class,
+            'client' => SimpleClient::class,
             'serializer' => EnqueueSerializer::class,
             'command_name' => 'prooph_bus',
             'reply_timeout' => 30000, // 30sec

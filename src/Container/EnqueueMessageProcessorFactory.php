@@ -77,7 +77,7 @@ class EnqueueMessageProcessorFactory implements ProvidesDefaultOptions, Requires
 
     public function dimensions(): array
     {
-        return ['prooph', 'enqueue_producer', 'message_processor'];
+        return ['prooph', 'enqueue-producer', 'message_processor'];
     }
 
     public function defaultOptions(): array

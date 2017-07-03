@@ -68,7 +68,7 @@ class SimpleClientFactory implements ProvidesDefaultOptions, RequiresConfigId
 
     public function dimensions(): array
     {
-        return ['enqueue', 'simple_client'];
+        return ['enqueue', 'client'];
     }
 
     public function defaultOptions(): array

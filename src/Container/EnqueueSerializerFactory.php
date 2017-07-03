@@ -73,7 +73,7 @@ class EnqueueSerializerFactory implements ProvidesDefaultOptions, RequiresConfig
 
     public function dimensions(): array
     {
-        return ['prooph', 'enqueue_producer', 'serializer'];
+        return ['prooph', 'enqueue-producer', 'serializer'];
     }
 
     public function defaultOptions(): array
