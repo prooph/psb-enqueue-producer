@@ -33,14 +33,20 @@ use React\Promise\Promise;
 
 final class EnqueueMessageProcessorTest extends TestCase
 {
-    public function test_should_implement_psr_processor_interface(): void
+    /**
+     * @test
+     */
+    public function it_should_implement_psr_processor_interface(): void
     {
         $rc = new \ReflectionClass(EnqueueMessageProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(PsrProcessor::class));
     }
 
-    public function test_should_reject_message_with_invalid_message_type(): void
+    /**
+     * @test
+     */
+    public function it_should_reject_message_with_invalid_message_type(): void
     {
         $serializerMock = $this->createSerializerMock();
         $serializerMock
@@ -73,7 +79,10 @@ final class EnqueueMessageProcessorTest extends TestCase
         );
     }
 
-    public function test_should_proxy_command_to_command_bus_and_return_ack(): void
+    /**
+     * @test
+     */
+    public function it_should_proxy_command_to_command_bus_and_return_ack(): void
     {
         $command = new DoSomething(['key' => 'value']);
 
@@ -104,7 +113,10 @@ final class EnqueueMessageProcessorTest extends TestCase
         $this->assertNull($result->getReply());
     }
 
-    public function test_should_proxy_event_to_event_bus_and_return_ack(): void
+    /**
+     * @test
+     */
+    public function it_should_proxy_event_to_event_bus_and_return_ack(): void
     {
         $event = new SomethingDone(['data' => 'test event']);
 
@@ -135,7 +147,10 @@ final class EnqueueMessageProcessorTest extends TestCase
         $this->assertNull($result->getReply());
     }
 
-    public function test_should_proxy_query_to_query_bus_and_return_reply(): void
+    /**
+     * @test
+     */
+    public function it_should_proxy_query_to_query_bus_and_return_reply(): void
     {
         $query = new FetchSomething(['data' => 'test query']);
 

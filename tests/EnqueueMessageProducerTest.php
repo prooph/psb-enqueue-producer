@@ -27,7 +27,10 @@ use React\Promise\Deferred;
 
 class EnqueueMessageProducerTest extends TestCase
 {
-    public function test_should_send_message_without_delay(): void
+    /**
+     * @test
+     */
+    public function it_should_send_message_without_delay(): void
     {
         $message = $this->createProophMessageMock();
 
@@ -57,7 +60,10 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertNull($traces[0]['delay']);
     }
 
-    public function test_should_send_message_with_delay(): void
+    /**
+     * @test
+     */
+    public function it_should_send_message_with_delay(): void
     {
         $message = $this->createMock(DelayedMessage::class);
         $message
@@ -91,7 +97,10 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertEquals(12.345, $traces[0]['delay']);
     }
 
-    public function test_should_send_message_with_deferred(): void
+    /**
+     * @test
+     */
+    public function it_should_send_message_with_deferred(): void
     {
         $message = $this->createProophMessageMock();
 
@@ -133,7 +142,10 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertEquals('application/json', $traces[0]['contentType']);
     }
 
-    public function test_should_send_message_with_deferred_and_reply_timeout(): void
+    /**
+     * @test
+     */
+    public function it_should_send_message_with_deferred_and_reply_timeout(): void
     {
         $message = $this->createProophMessageMock();
 
