@@ -3,7 +3,7 @@
  * This file is part of the prooph/psb-enqueue-producer.
  * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
  * (c) 2017-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2017 Maksym Kotliar <kotlyar.maksim@gmail.com>
+ * (c) 2017-2017 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
