@@ -71,12 +71,12 @@ class EnqueueSerializerFactory implements ProvidesDefaultOptions, RequiresConfig
         );
     }
 
-    public function dimensions(): array
+    public function dimensions(): iterable
     {
         return ['prooph', 'enqueue-producer', 'serializer'];
     }
 
-    public function defaultOptions(): array
+    public function defaultOptions(): iterable
     {
         return [
             'message_converter' => NoOpMessageConverter::class,

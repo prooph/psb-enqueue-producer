@@ -33,14 +33,14 @@ use React\Promise\Promise;
 
 final class EnqueueMessageProcessorTest extends TestCase
 {
-    public function testShouldImplementPsrProcessorInterface()
+    public function test_should_implement_psr_processor_interface(): void
     {
         $rc = new \ReflectionClass(EnqueueMessageProcessor::class);
 
         $this->assertTrue($rc->implementsInterface(PsrProcessor::class));
     }
 
-    public function testShouldRejectMessageWithInvalidMessageType()
+    public function test_should_reject_message_with_invalid_message_type(): void
     {
         $serializerMock = $this->createSerializerMock();
         $serializerMock
@@ -73,7 +73,7 @@ final class EnqueueMessageProcessorTest extends TestCase
         );
     }
 
-    public function testShouldProxyCommandToCommandBusAndReturnAck()
+    public function test_should_proxy_command_to_command_bus_and_return_ack(): void
     {
         $command = new DoSomething(['key' => 'value']);
 
@@ -104,7 +104,7 @@ final class EnqueueMessageProcessorTest extends TestCase
         $this->assertNull($result->getReply());
     }
 
-    public function testShouldProxyEventToEventBusAndReturnAck()
+    public function test_should_proxy_event_to_event_bus_and_return_ack(): void
     {
         $event = new SomethingDone(['data' => 'test event']);
 
@@ -135,7 +135,7 @@ final class EnqueueMessageProcessorTest extends TestCase
         $this->assertNull($result->getReply());
     }
 
-    public function testShouldProxyQueryToQueryBusAndReturnReply()
+    public function test_should_proxy_query_to_query_bus_and_return_reply(): void
     {
         $query = new FetchSomething(['data' => 'test query']);
 
@@ -179,7 +179,7 @@ final class EnqueueMessageProcessorTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|CommandBus
      */
-    private function createCommandBusMock()
+    private function createCommandBusMock(): CommandBus
     {
         return $this->createMock(CommandBus::class);
     }
@@ -187,7 +187,7 @@ final class EnqueueMessageProcessorTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|EventBus
      */
-    private function createEventBusMock()
+    private function createEventBusMock(): EventBus
     {
         return $this->createMock(EventBus::class);
     }
@@ -195,7 +195,7 @@ final class EnqueueMessageProcessorTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|QueryBus
      */
-    private function createQueryBusMock()
+    private function createQueryBusMock(): QueryBus
     {
         return $this->createMock(QueryBus::class);
     }
@@ -203,7 +203,7 @@ final class EnqueueMessageProcessorTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|EnqueueSerializer
      */
-    private function createSerializerMock()
+    private function createSerializerMock(): EnqueueSerializer
     {
         return $this->createMock(EnqueueSerializer::class);
     }

@@ -27,7 +27,7 @@ use React\Promise\Deferred;
 
 class EnqueueMessageProducerTest extends TestCase
 {
-    public function testShouldSendMessageWithoutDelay()
+    public function test_should_send_message_without_delay(): void
     {
         $message = $this->createProophMessageMock();
 
@@ -57,7 +57,7 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertNull($traces[0]['delay']);
     }
 
-    public function testShouldSendMessageWithDelay()
+    public function test_should_send_message_with_delay(): void
     {
         $message = $this->createMock(DelayedMessage::class);
         $message
@@ -91,7 +91,7 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertEquals(12.345, $traces[0]['delay']);
     }
 
-    public function testShouldSendMessageWithDeferred()
+    public function test_should_send_message_with_deferred(): void
     {
         $message = $this->createProophMessageMock();
 
@@ -133,7 +133,7 @@ class EnqueueMessageProducerTest extends TestCase
         $this->assertEquals('application/json', $traces[0]['contentType']);
     }
 
-    public function testShouldSendMessageWithDeferredAndReplyTimeout()
+    public function test_should_send_message_with_deferred_and_reply_timeout(): void
     {
         $message = $this->createProophMessageMock();
 
@@ -177,7 +177,7 @@ class EnqueueMessageProducerTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|Message
      */
-    private function createProophMessageMock()
+    private function createProophMessageMock(): Message
     {
         return $this->createMock(Message::class);
     }
@@ -185,15 +185,12 @@ class EnqueueMessageProducerTest extends TestCase
     /**
      * @return \PHPUnit_Framework_MockObject_MockObject|EnqueueSerializer
      */
-    private function createSerializerMock()
+    private function createSerializerMock(): EnqueueSerializer
     {
         return $this->createMock(EnqueueSerializer::class);
     }
 
-    /**
-     * @return TraceableProducer
-     */
-    private function createProducer()
+    private function createProducer(): TraceableProducer
     {
         $producerMock = $this->createMock(ProducerInterface::class);
         $producerMock
@@ -205,10 +202,7 @@ class EnqueueMessageProducerTest extends TestCase
         return new TraceableProducer($producerMock);
     }
 
-    /**
-     * @return TraceableProducer
-     */
-    private function createReplyProducer(Promise $promise)
+    private function createReplyProducer(Promise $promise): TraceableProducer
     {
         $producerMock = $this->createMock(ProducerInterface::class);
         $producerMock

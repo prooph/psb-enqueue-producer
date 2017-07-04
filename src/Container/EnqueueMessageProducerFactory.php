@@ -73,12 +73,12 @@ class EnqueueMessageProducerFactory implements ProvidesDefaultOptions, RequiresC
         );
     }
 
-    public function dimensions(): array
+    public function dimensions(): iterable
     {
         return ['prooph', 'enqueue-producer', 'message_producer'];
     }
 
-    public function defaultOptions(): array
+    public function defaultOptions(): iterable
     {
         return [
             'client' => SimpleClient::class,

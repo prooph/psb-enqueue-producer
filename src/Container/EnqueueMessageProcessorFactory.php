@@ -75,12 +75,12 @@ class EnqueueMessageProcessorFactory implements ProvidesDefaultOptions, Requires
         );
     }
 
-    public function dimensions(): array
+    public function dimensions(): iterable
     {
         return ['prooph', 'enqueue-producer', 'message_processor'];
     }
 
-    public function defaultOptions(): array
+    public function defaultOptions(): iterable
     {
         return [
             'command_bus' => CommandBus::class,

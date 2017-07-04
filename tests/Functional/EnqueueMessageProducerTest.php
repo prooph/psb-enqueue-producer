@@ -46,7 +46,7 @@ class EnqueueMessageProducerTest extends TestCase
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         (new Filesystem())->remove(__DIR__.'/queues/');
 
@@ -58,7 +58,7 @@ class EnqueueMessageProducerTest extends TestCase
     /**
      * @test
      */
-    public function it_sends_a_command_to_queue_pulls_it_with_consumer_and_forwards_it_to_command_bus()
+    public function it_sends_a_command_to_queue_pulls_it_with_consumer_and_forwards_it_to_command_bus(): void
     {
         $command = new DoSomething(['data' => 'test command']);
 
@@ -94,7 +94,7 @@ class EnqueueMessageProducerTest extends TestCase
     /**
      * @test
      */
-    public function it_sends_an_event_to_queue_pulls_it_with_consumer_and_forwards_it_to_event_bus()
+    public function it_sends_an_event_to_queue_pulls_it_with_consumer_and_forwards_it_to_event_bus(): void
     {
         $event = new SomethingDone(['data' => 'test event']);
 

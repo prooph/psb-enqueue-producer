@@ -66,12 +66,12 @@ class SimpleClientFactory implements ProvidesDefaultOptions, RequiresConfigId
         return new SimpleClient($options['config']);
     }
 
-    public function dimensions(): array
+    public function dimensions(): iterable
     {
         return ['enqueue', 'client'];
     }
 
-    public function defaultOptions(): array
+    public function defaultOptions(): iterable
     {
         return ['config' => []];
     }

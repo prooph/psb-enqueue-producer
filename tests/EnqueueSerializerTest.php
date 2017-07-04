@@ -26,7 +26,7 @@ use ProophTest\ServiceBus\Mock\SomethingDone;
  */
 class EnqueueSerializerTest extends TestCase
 {
-    public function testShouldAllowSerializeAndUnserializeCommand()
+    public function testShouldAllowSerializeAndUnserializeCommand(): void
     {
         $command = new DoSomething(['key' => 'value']);
 
@@ -42,7 +42,7 @@ class EnqueueSerializerTest extends TestCase
         $this->assertEquals($command, $unserializedCommand);
     }
 
-    public function testShouldAllowSerializeAndUnserializeEvent()
+    public function testShouldAllowSerializeAndUnserializeEvent(): void
     {
         $event = new SomethingDone(['key' => 'value']);
 
@@ -58,7 +58,7 @@ class EnqueueSerializerTest extends TestCase
         $this->assertEquals($event, $unserializedEvent);
     }
 
-    public function testShouldAllowSerializeAndUnserializeQuery()
+    public function testShouldAllowSerializeAndUnserializeQuery(): void
     {
         $query = new FetchSomething(['key' => 'value']);
 
