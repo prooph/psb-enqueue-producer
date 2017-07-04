@@ -82,7 +82,7 @@ class EnqueueMessageProducerTest extends TestCase
         $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
 
         $this->client->consume(new ChainExtension([
-            new LimitConsumedMessagesExtension(1),
+            new LimitConsumedMessagesExtension(2),
             new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
         ]));
 
@@ -118,7 +118,7 @@ class EnqueueMessageProducerTest extends TestCase
         $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
 
         $this->client->consume(new ChainExtension([
-            new LimitConsumedMessagesExtension(1),
+            new LimitConsumedMessagesExtension(2),
             new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
         ]));
 
