@@ -1,0 +1,8 @@
+/.settings
+/.project
+/.buildpath
+/vendor
+.idea
+nbproject
+composer.lock
+tests/Functional/queues
