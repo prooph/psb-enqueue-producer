@@ -14,10 +14,10 @@ declare(strict_types=1);
 namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Consumption\Result;
-use Enqueue\Psr\PsrContext;
-use Enqueue\Psr\PsrMessage;
-use Enqueue\Psr\PsrProcessor;
 use Enqueue\Util\JSON;
+use Interop\Queue\PsrContext;
+use Interop\Queue\PsrMessage;
+use Interop\Queue\PsrProcessor;
 use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
