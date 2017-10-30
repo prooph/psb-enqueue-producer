@@ -3,45 +3,45 @@
  * This file is part of the prooph/psb-enqueue-producer.
  * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
  * (c) 2017-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2017 Formapro <opensource@forma-pro.com>
+ * (c) 2017-2017 Formapro <opensource@forma-pro.com>.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-
 declare(strict_types=1);
 
 namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Client\Message as EnqueueMessage;
 use Enqueue\Client\ProducerInterface;
+use Enqueue\Rpc\Promise;
 use Enqueue\Rpc\TimeoutException;
 use Enqueue\Util\JSON;
 use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\Async\MessageProducer;
 use React\Promise\Deferred;
 
-final class EnqueueMessageProducer implements MessageProducer
+class EnqueueMessageProducer implements MessageProducer
 {
     /**
      * @var ProducerInterface
      */
-    private $producer;
+    protected $producer;
 
     /**
      * @var EnqueueSerializer
      */
-    private $serializer;
+    protected $serializer;
 
     /**
      * @var int
      */
-    private $replyTimeout;
+    protected $replyTimeout;
 
     /**
      * @var string
      */
-    private $commandName;
+    protected $commandName;
 
     public function __construct(ProducerInterface $producer, EnqueueSerializer $serializer, string $commandName, int $replyTimeout)
     {
@@ -63,7 +63,7 @@ final class EnqueueMessageProducer implements MessageProducer
             $enqueueMessage->setDelay((int) $message->delay() / 1000);
         }
 
-        $reply = $this->producer->sendCommand($this->commandName, $enqueueMessage, (bool) $deferred);
+        $reply = $this->sendCommand($deferred, $enqueueMessage, $message);
 
         if (null !== $deferred) {
             try {
@@ -75,4 +75,10 @@ final class EnqueueMessageProducer implements MessageProducer
             }
         }
     }
+
+    protected function sendCommand(?Deferred $deferred, EnqueueMessage $enqueueMessage, Message $message): ?Promise
+    {
+        return $this->producer->sendCommand($this->commandName, $enqueueMessage, (bool) $deferred);
+    }
 }
+
