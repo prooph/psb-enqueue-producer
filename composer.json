@@ -42,7 +42,8 @@
         "phpspec/prophecy": "^1.7",
         "prooph/php-cs-fixer-config": "^0.2",
         "phpunit/phpunit": "^6.0",
-        "malukenho/docheader": "^0.1.4"
+        "malukenho/docheader": "^0.1.4",
+        "enqueue/amqp-tools": "^0.7|^0.8"
     },
     "suggest" : {
         "psr/container": "^1.0 for usage of provided factories",
