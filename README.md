@@ -3,6 +3,12 @@ Enqueue Message Producer for Prooph Service Bus
 
 Use [Enqueue](https://github.com/php-enqueue/enqueue-dev) as a message producer for [Prooph Service Bus](https://github.com/prooph/service-bus).
 
+## Important
+
+This library will receive support until December 31, 2019 and will then be deprecated.
+
+For further information see the official announcement here: [https://www.sasaprolic.com/2018/08/the-future-of-prooph-components.html](https://www.sasaprolic.com/2018/08/the-future-of-prooph-components.html)
+
 ## Installation
 
 You can install the producer via composer by executing `$ composer require prooph/psb-enqueue-producer`.
