@@ -27,6 +27,29 @@ systems work together.
 * Supports events, commands and queues with possibility to get result.
 * Simple and clean code. 
 
+## Symfony configuration
+
+If you're using the [EnqueueBundle](https://github.com/php-enqueue/enqueue-bundle) you can configure the classes from this package like this:
+
+```yaml
+services:
+    Prooph\ServiceBus\Message\Enqueue\EnqueueSerializer:
+    Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProducer:
+        $commandName: 'my_application'
+        $replyTimeout: 1000 # Timeout in milliseconds.
+    Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor:
+        tags:
+            - { name: 'enqueue.client.processor', topicName: '__command__', processorName: 'my_application' }
+```
+
+Then you can run the processor like this:
+
+```
+bin/console enqueue:consume --setup-broker -vvv
+```
+
+See the [Enqueue documentation](https://github.com/php-enqueue/enqueue-dev/blob/master/docs/index.md) for more information.
+
 ## Support
 
 - Ask questions on Stack Overflow tagged with [#prooph](https://stackoverflow.com/questions/tagged/prooph).
