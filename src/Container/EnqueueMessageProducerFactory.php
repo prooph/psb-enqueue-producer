@@ -1,7 +1,7 @@
 <?php
 
 /**
- * This file is part of the prooph/psb-enqueue-producer.
+ * This file is part of prooph/psb-enqueue-producer.
  * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
  * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
  * (c) 2017-2018 Formapro <opensource@forma-pro.com>
