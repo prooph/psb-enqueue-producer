@@ -1,9 +1,10 @@
 <?php
+
 /**
  * This file is part of the prooph/psb-enqueue-producer.
- * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
- * (c) 2017-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2017 Formapro <opensource@forma-pro.com>
+ * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2018 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -79,10 +80,10 @@ final class EnqueueMessageProcessor implements PsrProcessor
 
                 return Result::reply($psrContext->createMessage($body));
             default:
-                return Result::reject(sprintf(
+                return Result::reject(\sprintf(
                     'The message type "%s" is invalid. The supported types are "%s"',
                     $message->messageType(),
-                    implode('", "', [Message::TYPE_COMMAND, Message::TYPE_EVENT, Message::TYPE_QUERY])
+                    \implode('", "', [Message::TYPE_COMMAND, Message::TYPE_EVENT, Message::TYPE_QUERY])
                 ));
         }
 
