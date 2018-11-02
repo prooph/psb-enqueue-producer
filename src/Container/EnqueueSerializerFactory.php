@@ -1,9 +1,10 @@
 <?php
+
 /**
- * This file is part of the prooph/psb-enqueue-producer.
- * (c) 2017-2017 prooph software GmbH <contact@prooph.de>
- * (c) 2017-2017 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2017 Formapro <opensource@forma-pro.com>
+ * This file is part of prooph/psb-enqueue-producer.
+ * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2018 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -49,7 +50,7 @@ class EnqueueSerializerFactory implements ProvidesDefaultOptions, RequiresConfig
     {
         if (! isset($arguments[0]) || ! $arguments[0] instanceof ContainerInterface) {
             throw new InvalidArgumentException(
-                sprintf('The first argument must be of type %s', ContainerInterface::class)
+                \sprintf('The first argument must be of type %s', ContainerInterface::class)
             );
         }
 
