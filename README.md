@@ -39,7 +39,9 @@ services:
         $replyTimeout: 1000 # Timeout in milliseconds.
     Prooph\ServiceBus\Message\Enqueue\EnqueueMessageProcessor:
         tags:
-            - { name: 'enqueue.client.processor', topicName: '__command__', processorName: 'my_application' }
+            - { name: 'enqueue.processor', command: 'my_application' }
+            # For enqueue 0.8 use this instead.
+            #- { name: 'enqueue.client.processor', topicName: '__command__', processorName: 'my_application' }
 ```
 
 Then you can run the processor like this:
