@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace ProophTest\ServiceBus\Enqueue\Functional;
 
-use Enqueue\Client\Config;
 use Enqueue\Consumption\ChainExtension;
 use Enqueue\Consumption\Extension\LimitConsumedMessagesExtension;
 use Enqueue\Consumption\Extension\LimitConsumptionTimeExtension;
@@ -53,6 +52,8 @@ class EnqueueMessageProducerTest extends TestCase
 
         $this->client = new SimpleClient('file://'.__DIR__.'/queues');
 
+        $this->client->getQueueConsumer()->setReceiveTimeout(1);
+
         $this->serializer = new EnqueueSerializer(new FQCNMessageFactory(), new NoOpMessageConverter());
     }
 
@@ -66,10 +67,6 @@ class EnqueueMessageProducerTest extends TestCase
         //The message dispatcher works with a ready-to-use enqueue producer and one queue
         $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
 
-        //Normally you would send the command on a command bus. We skip this step here cause we are only
-        //interested in the function of the message dispatcher
-        $messageProducer($command);
-
         //Set up command bus which will receive the command message from the enqueue consumer
         $consumerCommandBus = new CommandBus();
 
@@ -80,11 +77,15 @@ class EnqueueMessageProducerTest extends TestCase
         $router->attachToMessageBus($consumerCommandBus);
 
         $enqueueProcessor = new EnqueueMessageProcessor($consumerCommandBus, new EventBus(), new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
+        $this->client->bindCommand('prooph_bus', $enqueueProcessor);
+
+        //Normally you would send the command on a command bus. We skip this step here cause we are only
+        //interested in the function of the message dispatcher
+        $messageProducer($command);
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(2),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
+            new LimitConsumptionTimeExtension(new \DateTime('now + 1 seconds')),
         ]));
 
         $this->assertNotNull($doSomethingHandler->getLastMessage());
@@ -102,10 +103,6 @@ class EnqueueMessageProducerTest extends TestCase
         //The message dispatcher works with a ready-to-use enqueue producer and one queue
         $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
 
-        //Normally you would send the event on a event bus. We skip this step here cause we are only
-        //interested in the function of the message dispatcher
-        $messageProducer($event);
-
         //Set up event bus which will receive the event message from the enqueue consumer
         $consumerEventBus = new EventBus();
 
@@ -116,11 +113,15 @@ class EnqueueMessageProducerTest extends TestCase
         $router->attachToMessageBus($consumerEventBus);
 
         $enqueueProcessor = new EnqueueMessageProcessor(new CommandBus(), $consumerEventBus, new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
+        $this->client->bindCommand('prooph_bus', $enqueueProcessor);
+
+        //Normally you would send the event on a event bus. We skip this step here cause we are only
+        //interested in the function of the message dispatcher
+        $messageProducer($event);
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(2),
-            new LimitConsumptionTimeExtension(new \DateTime('now + 5 seconds')),
+            new LimitConsumptionTimeExtension(new \DateTime('now + 1 seconds')),
         ]));
 
         $this->assertNotNull($somethingDoneListener->getLastMessage());
