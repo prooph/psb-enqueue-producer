@@ -14,7 +14,6 @@ declare(strict_types=1);
 
 namespace ProophTest\ServiceBus\Enqueue\Functional;
 
-use Enqueue\Client\Config;
 use Enqueue\Consumption\ChainExtension;
 use Enqueue\Consumption\Extension\LimitConsumedMessagesExtension;
 use Enqueue\Consumption\Extension\LimitConsumptionTimeExtension;
@@ -63,6 +62,12 @@ class EnqueueMessageProducerTest extends TestCase
     {
         $command = new DoSomething(['data' => 'test command']);
 
+        //Set up command bus which will receive the command message from the enqueue consumer
+        $consumerCommandBus = new CommandBus();
+        $enqueueProcessor = new EnqueueMessageProcessor($consumerCommandBus, new EventBus(), new QueryBus(), $this->serializer);
+
+        $this->client->bindCommand('prooph_bus', $enqueueProcessor);
+
         //The message dispatcher works with a ready-to-use enqueue producer and one queue
         $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
 
@@ -70,17 +75,12 @@ class EnqueueMessageProducerTest extends TestCase
         //interested in the function of the message dispatcher
         $messageProducer($command);
 
-        //Set up command bus which will receive the command message from the enqueue consumer
-        $consumerCommandBus = new CommandBus();
 
         $doSomethingHandler = new MessageHandler();
 
         $router = new CommandRouter();
         $router->route($command->messageName())->to($doSomethingHandler);
         $router->attachToMessageBus($consumerCommandBus);
-
-        $enqueueProcessor = new EnqueueMessageProcessor($consumerCommandBus, new EventBus(), new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(2),
@@ -99,6 +99,12 @@ class EnqueueMessageProducerTest extends TestCase
     {
         $event = new SomethingDone(['data' => 'test event']);
 
+        //Set up event bus which will receive the event message from the enqueue consumer
+        $consumerEventBus = new EventBus();
+        $enqueueProcessor = new EnqueueMessageProcessor(new CommandBus(), $consumerEventBus, new QueryBus(), $this->serializer);
+
+        $this->client->bindCommand('prooph_bus', $enqueueProcessor);
+
         //The message dispatcher works with a ready-to-use enqueue producer and one queue
         $messageProducer = new EnqueueMessageProducer($this->client->getProducer(), $this->serializer, 'prooph_bus', 2000);
 
@@ -106,17 +112,12 @@ class EnqueueMessageProducerTest extends TestCase
         //interested in the function of the message dispatcher
         $messageProducer($event);
 
-        //Set up event bus which will receive the event message from the enqueue consumer
-        $consumerEventBus = new EventBus();
 
         $somethingDoneListener = new MessageHandler();
 
         $router = new EventRouter();
         $router->route($event->messageName())->to($somethingDoneListener);
         $router->attachToMessageBus($consumerEventBus);
-
-        $enqueueProcessor = new EnqueueMessageProcessor(new CommandBus(), $consumerEventBus, new QueryBus(), $this->serializer);
-        $this->client->bind(Config::COMMAND_TOPIC, 'prooph_bus', $enqueueProcessor);
 
         $this->client->consume(new ChainExtension([
             new LimitConsumedMessagesExtension(2),
