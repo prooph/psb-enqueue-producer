@@ -16,9 +16,9 @@ namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Consumption\Result;
 use Enqueue\Util\JSON;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrProcessor;
+use Interop\Queue\Context as PsrContext;
+use Interop\Queue\Message as PsrMessage;
+use Interop\Queue\Processor as PsrProcessor;
 use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
