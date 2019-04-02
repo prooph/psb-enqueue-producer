@@ -2,9 +2,9 @@
 
 /**
  * This file is part of prooph/psb-enqueue-producer.
- * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
- * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2018 Formapro <opensource@forma-pro.com>
+ * (c) 2017-2019 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2019 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2019 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -75,7 +75,6 @@ class EnqueueMessageProducerTest extends TestCase
         //interested in the function of the message dispatcher
         $messageProducer($command);
 
-
         $doSomethingHandler = new MessageHandler();
 
         $router = new CommandRouter();
@@ -111,7 +110,6 @@ class EnqueueMessageProducerTest extends TestCase
         //Normally you would send the event on a event bus. We skip this step here cause we are only
         //interested in the function of the message dispatcher
         $messageProducer($event);
-
 
         $somethingDoneListener = new MessageHandler();
 
