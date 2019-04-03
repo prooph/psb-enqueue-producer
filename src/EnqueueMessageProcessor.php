@@ -2,9 +2,9 @@
 
 /**
  * This file is part of prooph/psb-enqueue-producer.
- * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
- * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2018 Formapro <opensource@forma-pro.com>
+ * (c) 2017-2019 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2019 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2019 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,9 +16,9 @@ namespace Prooph\ServiceBus\Message\Enqueue;
 
 use Enqueue\Consumption\Result;
 use Enqueue\Util\JSON;
-use Interop\Queue\PsrContext;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrProcessor;
+use Interop\Queue\Context as PsrContext;
+use Interop\Queue\Message as PsrMessage;
+use Interop\Queue\Processor as PsrProcessor;
 use Prooph\Common\Messaging\Message;
 use Prooph\ServiceBus\CommandBus;
 use Prooph\ServiceBus\EventBus;
@@ -73,7 +73,7 @@ final class EnqueueMessageProcessor implements PsrProcessor
             case Message::TYPE_QUERY:
                 $promise = $this->queryBus->dispatch($message);
 
-                $body = null;
+                $body = '';
                 $promise->then(function ($value) use (&$body) {
                     $body = JSON::encode($value);
                 });

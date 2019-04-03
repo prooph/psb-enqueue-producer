@@ -2,9 +2,9 @@
 
 /**
  * This file is part of prooph/psb-enqueue-producer.
- * (c) 2017-2018 prooph software GmbH <contact@prooph.de>
- * (c) 2017-2018 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
- * (c) 2017-2018 Formapro <opensource@forma-pro.com>
+ * (c) 2017-2019 prooph software GmbH <contact@prooph.de>
+ * (c) 2017-2019 Sascha-Oliver Prolic <saschaprolic@googlemail.com>
+ * (c) 2017-2019 Formapro <opensource@forma-pro.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -17,8 +17,8 @@ namespace ProophTest\ServiceBus\Enqueue;
 use Enqueue\Consumption\Result;
 use Enqueue\Null\NullContext;
 use Enqueue\Null\NullMessage;
-use Interop\Queue\PsrMessage;
-use Interop\Queue\PsrProcessor;
+use Interop\Queue\Message as PsrMessage;
+use Interop\Queue\Processor as PsrProcessor;
 use PHPUnit\Framework\TestCase;
 use Prooph\Common\Messaging\DomainMessage;
 use Prooph\Common\Messaging\PayloadTrait;
