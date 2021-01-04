@@ -27,7 +27,7 @@
         "php": "^7.1",
         "prooph/common" : "^4.1",
         "prooph/service-bus" : "^6.0",
-        "enqueue/simple-client": "^0.10.4"
+        "enqueue/simple-client": "^0.10"
     },
     "require-dev": {
         "react/promise": "^2.4.1",
@@ -35,8 +35,8 @@
         "sandrokeil/interop-config": "^2.0.1",
         "phpspec/prophecy": "^1.7",
         "phpunit/phpunit": "^6.0",
-        "enqueue/fs": "^0.10.4",
-        "prooph/php-cs-fixer-config": "^0.4.0"
+        "enqueue/fs": "^0.10",
+        "prooph/php-cs-fixer-config": "^0.4"
     },
     "suggest" : {
         "psr/container": "^1.0 for usage of provided factories",
